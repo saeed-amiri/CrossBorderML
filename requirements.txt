@@ -1,0 +1,11 @@
+pytest
+numpy
+pandas
+sqlite
+sqlalchemy
+seaborn
+matplotlib
+wordcloud
+scikit-learn
+pillow
+hydra-core

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "crossborderml"
+version = "0.1.0"
+description = "FDI Growth Model"
+authors = [{ name = "Saeed Amiri" }]
+dependencies = [
+    "pytest",
+    "numpy",
+    "pandas",
+    "sqlite",
+    "sqlalchemy",
+    "seaborn",
+    "matplotlib",
+    "wordcloud",
+    "scikit-learn",
+    "pillow",
+    "hydra-core"
+]
+
+[tool.setuptools]
+packages = ["crossborderml"]
+package-dir = {"" = "src"}
