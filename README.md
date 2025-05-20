@@ -28,4 +28,4 @@ CrossBorderML/
 * **`tests/`**: Unit tests and validation scripts for ensuring code reliability and correctness.
 * **`requirements.txt`**: List of Python dependencies for the project.
 * **`pyproject.toml`**: Optional modern build system configuration for packaging and tool management.
-* **`README.md`**: Project overview and documentation (this file).
+* **`README.md`**: Project overview and documentation.
