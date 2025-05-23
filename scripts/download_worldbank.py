@@ -67,7 +67,7 @@ def download_indicator(name: str,
     """Download the data"""
     url = BASE_URL.format(code=code)
     log.write(f"- Downloading '{name}' from:\n")
-    log.write(f"> {url}\n")
+    log.write(f"> {url}  \n")
     response = requests.get(url, timeout=60)
     if response.status_code != 200:
         print(f"\nError! Failed to download '{name}'\n")
