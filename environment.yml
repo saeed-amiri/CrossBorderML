@@ -10,6 +10,7 @@ dependencies:
   - matplotlib
   - seaborn
   - sqlalchemy
+  - requests
   - pip
   - pip:
       - hydra-core

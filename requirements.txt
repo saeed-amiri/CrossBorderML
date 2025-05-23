@@ -9,3 +9,4 @@ wordcloud
 scikit-learn
 pillow
 hydra-core
+requests
