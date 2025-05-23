@@ -31,7 +31,7 @@ def download_indicator(name: str,
     log.write(f"- Downloading '{name}' from {url}\n")
     response = requests.get(url, timeout=60)
     if response.status_code != 200:
-        print(f"+ Failed to download '{name}'", )
+        print(f"\nError! Failed to download '{name}'\n")
 
     zip_path = os.path.join(dest_dir, f"{name}.zip")
     with open(zip_path, "wb") as f:
