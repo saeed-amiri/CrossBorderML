@@ -1,7 +1,8 @@
 # Data Sources
 
 
-## [2025-05-23 17:57:17.683369]:
+## [2025-05-25 18:15:06.926259]:
+Reading indicators file `src/crossborderml/conf/indicators.yaml`  
 - Downloading 'gdp' from:
 > https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.CD?downloadformat=csv  
 > Saved to data/raw/gdp.zip
@@ -78,7 +79,7 @@
 > https://api.worldbank.org/v2/en/indicator/IT.NET.USER.ZS?downloadformat=csv  
 > Saved to data/raw/internet_users_pct.zip
 
-### [2025-05-25 16:20:59.030389]:  
+### [2025-05-25 18:15:36.019373]:  
 Unzipping the raw files:  
 > Extracted `population_growth.zip` to `data`  
 > Extracted `population_15_64_pct.zip` to `data`  
