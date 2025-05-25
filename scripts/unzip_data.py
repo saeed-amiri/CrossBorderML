@@ -22,7 +22,7 @@ def unzip_all_zips(directory: str,
             zip_path = os.path.join(directory, file)
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                 zip_ref.extractall(EXTRACTED_DIR)
-                log.write(f"> Extracted `{file}` to `{EXTRACTED_DIR}` \n")
+                log.write(f"> Extracted `{file}` to `{EXTRACTED_DIR}`  \n")
 
 
 if __name__ == "__main__":
