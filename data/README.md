@@ -1,7 +1,8 @@
 # Data Sources
 
 
-## [2025-05-23 17:57:17.683369]:
+## [2025-05-25 18:15:06.926259]:
+Reading indicators file `src/crossborderml/conf/indicators.yaml`  
 - Downloading 'gdp' from:
 > https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.CD?downloadformat=csv  
 > Saved to data/raw/gdp.zip
@@ -77,3 +78,36 @@
 - Downloading 'internet_users_pct' from:
 > https://api.worldbank.org/v2/en/indicator/IT.NET.USER.ZS?downloadformat=csv  
 > Saved to data/raw/internet_users_pct.zip
+
+### [2025-05-25 18:15:36.019373]:  
+Unzipping the raw files:  
+> Extracted `population_growth.zip` to `data`  
+> Extracted `population_15_64_pct.zip` to `data`  
+> Extracted `gni_per_capita.zip` to `data`  
+> Extracted `gross_capital_formation_pct_gdp.zip` to `data`  
+> Extracted `labor_participation.zip` to `data`  
+> Extracted `adult_literacy_rate.zip` to `data`  
+> Extracted `gdp_per_capita.zip` to `data`  
+> Extracted `co2_emissions.zip` to `data`  
+> Extracted `school_enrollment_primary.zip` to `data`  
+> Extracted `infant_mortality.zip` to `data`  
+> Extracted `health_expenditure_per_capita.zip` to `data`  
+> Extracted `labor_participation_rate.zip` to `data`  
+> Extracted `forest_area_pct.zip` to `data`  
+> Extracted `school_enrollment_secondary.zip` to `data`  
+> Extracted `population_total.zip` to `data`  
+> Extracted `population.zip` to `data`  
+> Extracted `gdp.zip` to `data`  
+> Extracted `unemployment_total.zip` to `data`  
+> Extracted `urban_population_pct.zip` to `data`  
+> Extracted `fdi.zip` to `data`  
+> Extracted `school_enrollment.zip` to `data`  
+> Extracted `co2_emissions_per_capita.zip` to `data`  
+> Extracted `current_account_balance_pct_gdp.zip` to `data`  
+> Extracted `internet_users_pct.zip` to `data`  
+> Extracted `fdi_inflows.zip` to `data`  
+> Extracted `renewable_energy_pct.zip` to `data`  
+> Extracted `inflation.zip` to `data`  
+> Extracted `life_expectancy.zip` to `data`  
+> Extracted `access_to_electricity.zip` to `data`  
+> Extracted `population_65_plus_pct.zip` to `data`  
