@@ -1,7 +1,6 @@
 pytest
 numpy
 pandas
-sqlite
 sqlalchemy
 seaborn
 matplotlib
