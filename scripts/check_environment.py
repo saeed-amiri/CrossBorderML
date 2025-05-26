@@ -2,11 +2,11 @@
 A script for cheking the enviroment before initiate any
 actions.
 """
-import os
+
+import importlib.metadata
 from pathlib import Path
 from typing import Callable, TextIO
 from dataclasses import dataclass
-
 
 ROOT: Path = Path(__file__).resolve().parents[1]
 LOG: Path = ROOT / "env.log"
@@ -67,6 +67,9 @@ def file_not_empty(path_i: Path) -> bool:
 
 
 RULES: list[CheckRule] = [
+    CheckRule("indicators.yaml",
+              ROOT / "src/crossborderml/conf/indicators.yaml", file_not_empty,
+              "error", "Make sure indicators are defined."),
     CheckRule("DATA directory", ROOT / "data", exists,
               "warning", "Run: `python prepare_data.py` to create it."),
     CheckRule("RAW directory", ROOT / "data/raw", exists,
@@ -75,9 +78,6 @@ RULES: list[CheckRule] = [
               "warning", "Run: `python prepare_data.py`"),
     CheckRule("CONF directory", ROOT / "src/crossborderml/conf", exists,
               "error", "Check config installation or clone structure."),
-    CheckRule("indicators.yaml",
-              ROOT / "src/crossborderml/conf/indicators.yaml", file_not_empty,
-              "error", "Make sure indicators are defined."),
     CheckRule("requirements.txt", ROOT / "requirements.txt", file_not_empty,
               "error", "This file is required to install dependencies."),
 ]
@@ -100,11 +100,36 @@ def run_checks(rules: list[CheckRule],
                 counter.log_warning(log, msg)
 
 
+def check_env_packages(req_path: Path,
+                       counter: StatusCounter,
+                       log: TextIO
+                       ) -> None:
+    """Check if the main packages are installed"""
+    with req_path.open("r", encoding="utf-8") as f:
+        requirements = [
+            line.strip() for line in f
+            if line.strip() and not line.startswith("#")
+        ]
+
+    log.write(f"\n# === Package Check from `{req_path}` === #\n")
+
+    for req in requirements:
+        pkg_name = req.split('==')[0].split('>=')[0].split('<=')[0].strip()
+        try:
+            version = importlib.metadata.version(pkg_name)
+            log.write(f"[OK] `{pkg_name}` is installed (version {version}).\n")
+        except importlib.metadata.PackageNotFoundError:
+            counter.log_error(
+                log,
+                f"`{pkg_name}` is NOT installed. Run: `pip install {req}`")
+
+
 if __name__ == '__main__':
     COUNTER = StatusCounter()
     with open(LOG, 'w', encoding='utf-8') as LOGGER:
         LOGGER.write("# === Environment Check LOG === #\n")
         run_checks(RULES, LOGGER, COUNTER)
+        check_env_packages(ROOT / "requirements.txt", COUNTER, LOGGER)
         LOGGER.write("\n# === Summary === #\n")
         LOGGER.write(
             f"Warnings: {COUNTER.warnings}, Errors: {COUNTER.errors}\n")
