@@ -13,7 +13,6 @@ CrossBorderML/
     ├── src
     │   └── crossborderml
     │       └── conf
-    │           └── pathes.yaml
     └── tests
 ```
 
