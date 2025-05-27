@@ -10,14 +10,7 @@ import zipfile
 import requests
 import yaml
 
-
-PROJECT_ROOT: Path = Path(__file__).resolve().parents[3]
-DEFAULT_DATA_DIR: Path = PROJECT_ROOT / "data"
-DEFAULT_INDICATORS_PATH: Path = \
-    PROJECT_ROOT / "src/crossborderml/conf/indicators.yaml"
-EXTRACTED_DIR = PROJECT_ROOT / "data"
-DEFAULT_README: Path = DEFAULT_DATA_DIR / "README.md"
-RAW_DIR = PROJECT_ROOT / "data" / "raw"
+from crossborderml.config import CFG
 
 
 def _download_indicator(name: str,
@@ -40,16 +33,16 @@ def _download_indicator(name: str,
     log.write(f"> Saved to {zip_path}\n")
 
 
-def _load_indicators(indicators_path: Path = DEFAULT_INDICATORS_PATH
+def _load_indicators(indicators_path: Path = CFG.paths.indicator_yaml
                      ) -> dict[str, str]:
     with open(indicators_path, 'r', encoding='utf-8') as f:
         yaml_data = yaml.load(f, Loader=yaml.SafeLoader)
     return yaml_data['INDICATORS']
 
 
-def run_download(indicators_path: Path = DEFAULT_INDICATORS_PATH,
-                 dest_dir: Path = RAW_DIR,
-                 readme_path: Path = DEFAULT_README
+def run_download(indicators_path: Path = CFG.paths.indicator_yaml,
+                 dest_dir: Path = CFG.paths.raw_data_dir,
+                 readme_path: Path = CFG.paths.data_readme
                  ) -> None:
     """Download the files selected in indicators"""
     indicators = _load_indicators(indicators_path)
@@ -69,17 +62,18 @@ def _unzip_all_zips(directory: Path,
         if file.endswith(".zip"):
             zip_path = os.path.join(directory, file)
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-                zip_ref.extractall(EXTRACTED_DIR)
-                log.write(f"> Extracted `{file}` to `{EXTRACTED_DIR}`  \n")
+                zip_ref.extractall(CFG.paths.data_dir)
+                log.write(
+                    f"> Extracted `{file}` to `{CFG.paths.data_dir}`  \n")
 
 
 def run_unzip() -> None:
     """Unzip all the files"""
-    with open(DEFAULT_README, 'a', encoding='utf-8') as log:
+    with open(CFG.paths.data_readme, 'a', encoding='utf-8') as log:
         log.write(f'\n### [{datetime.now()}]:  \n')
         log.write('Unzipping the raw files:  \n')
-        os.makedirs(EXTRACTED_DIR, exist_ok=True)
-        _unzip_all_zips(RAW_DIR, log)
+        os.makedirs(CFG.paths.data_dir, exist_ok=True)
+        _unzip_all_zips(CFG.paths.raw_data_dir, log)
 
 
 if __name__ == '__main__':
