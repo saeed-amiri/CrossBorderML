@@ -75,7 +75,7 @@ RULES: list[CheckRule] = [
     CheckRule("requirements.txt", ROOT / "requirements.txt", file_not_empty,
               "error", "This file is required to install dependencies."),
     CheckRule("DATA directory", ROOT / "data", exists,
-              "warning", "Run: `python prepare_data.py` to create it."),
+              "warning", "Run: `python download_worldbank.py` to create it."),
     CheckRule("RAW directory", ROOT / "data/raw", exists,
               "warning", "Check your data download step."),
     CheckRule("PROCESSED directory", ROOT / "data/processed", exists,
