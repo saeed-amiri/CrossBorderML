@@ -70,16 +70,16 @@ RULES: list[CheckRule] = [
     CheckRule("indicators.yaml",
               ROOT / "src/crossborderml/conf/indicators.yaml", file_not_empty,
               "error", "Make sure indicators are defined."),
+    CheckRule("CONF directory", ROOT / "src/crossborderml/conf", exists,
+              "error", "Check config installation or clone structure."),
+    CheckRule("requirements.txt", ROOT / "requirements.txt", file_not_empty,
+              "error", "This file is required to install dependencies."),
     CheckRule("DATA directory", ROOT / "data", exists,
               "warning", "Run: `python prepare_data.py` to create it."),
     CheckRule("RAW directory", ROOT / "data/raw", exists,
               "warning", "Check your data download step."),
     CheckRule("PROCESSED directory", ROOT / "data/processed", exists,
-              "warning", "Run: `python prepare_data.py`"),
-    CheckRule("CONF directory", ROOT / "src/crossborderml/conf", exists,
-              "error", "Check config installation or clone structure."),
-    CheckRule("requirements.txt", ROOT / "requirements.txt", file_not_empty,
-              "error", "This file is required to install dependencies."),
+              "warning", "Run: `python unzip_data.py`"),
 ]
 
 
