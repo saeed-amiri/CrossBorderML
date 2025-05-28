@@ -19,9 +19,16 @@ class PathConfig:
 
 
 @dataclass(frozen=True)
+class ValidData:
+    """Configs for validation of data"""
+    file_prefix: str = 'API_'
+
+
+@dataclass(frozen=True)
 class Config:
     """Binding them together"""
     paths: PathConfig = PathConfig()
+    validd: ValidData = ValidData()
 
 
 CFG = Config()
