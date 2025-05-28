@@ -141,7 +141,8 @@ def _unzip_all_zips(zip_dir: Path,
         try:
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                 zip_ref.extractall(extract_dir)
-                log.write(f"Extracted `{zip_path.name}` to `{extract_dir}`\n")
+                log.write(
+                    f"Extracted `{zip_path.name}` to `{extract_dir}`  \n")
         except zipfile.BadZipFile:
             log.write(f"Bad zip file: {zip_path}\n")
         except PermissionError:
@@ -156,8 +157,8 @@ def run_unzip(zip_dir: Path = CFG.paths.raw_data_dir,
               ) -> None:
     """Unzip all the files"""
     with open(log_path, 'a', encoding='utf-8') as log:
-        log.write(f'\n## [{datetime.now()}]:\n')
-        log.write(f'Unzipping files from `{zip_dir}`\n')
+        log.write(f'\n## [{datetime.now()}]:  \n')
+        log.write(f'Unzipping files from `{zip_dir}`  \n')
         _unzip_all_zips(zip_dir, log, extract_dir)
 
 
