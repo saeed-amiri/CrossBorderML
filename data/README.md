@@ -1,7 +1,7 @@
 # Data Sources
 
 
-## [2025-05-27 17:12:19.045132]:
+## [2025-05-28 17:05:43.718407]:
 Reading indicators file `/home/santiago/Documents/MyScripts/CrossBorderML/src/crossborderml/conf/indicators.yaml`  
 - Downloading 'gdp' from:
 > https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.CD?downloadformat=csv  
@@ -79,35 +79,37 @@ Reading indicators file `/home/santiago/Documents/MyScripts/CrossBorderML/src/cr
 > https://api.worldbank.org/v2/en/indicator/IT.NET.USER.ZS?downloadformat=csv  
 > Saved to /home/santiago/Documents/MyScripts/CrossBorderML/data/raw/internet_users_pct.zip
 
-### [2025-05-27 17:23:08.446691]:  
-Unzipping the raw files:  
-> Extracted `population_growth.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `population_15_64_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `gni_per_capita.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `gross_capital_formation_pct_gdp.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `labor_participation.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `adult_literacy_rate.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `gdp_per_capita.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `co2_emissions.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `school_enrollment_primary.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `infant_mortality.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `health_expenditure_per_capita.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `labor_participation_rate.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `forest_area_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `school_enrollment_secondary.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `population_total.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `population.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `gdp.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `unemployment_total.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `urban_population_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `fdi.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `school_enrollment.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `co2_emissions_per_capita.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `current_account_balance_pct_gdp.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `internet_users_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `fdi_inflows.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `renewable_energy_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `inflation.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `life_expectancy.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `access_to_electricity.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
-> Extracted `population_65_plus_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`  
+Download complete. 25 succeeded, 0 failed.
+
+## [2025-05-28 17:05:57.065881]:
+Unzipping files from `/home/santiago/Documents/MyScripts/CrossBorderML/data/raw`
+Extracted `population_growth.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `population_15_64_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `gni_per_capita.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `gross_capital_formation_pct_gdp.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `labor_participation.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `adult_literacy_rate.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `gdp_per_capita.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `co2_emissions.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `school_enrollment_primary.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `infant_mortality.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `health_expenditure_per_capita.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `labor_participation_rate.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `forest_area_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `school_enrollment_secondary.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `population_total.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `population.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `gdp.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `unemployment_total.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `urban_population_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `fdi.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `school_enrollment.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `co2_emissions_per_capita.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `current_account_balance_pct_gdp.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `internet_users_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `fdi_inflows.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `renewable_energy_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `inflation.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `life_expectancy.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `access_to_electricity.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
+Extracted `population_65_plus_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data`
