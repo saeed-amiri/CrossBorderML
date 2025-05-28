@@ -11,6 +11,7 @@ class PathConfig:
     data_dir: Path = project_root / "data"
     raw_data_dir: Path = data_dir / "raw"
     processed_data_dir: Path = data_dir / "processed"
+    extracted_data_dir: Path = data_dir / "extracted"
     sql_dir: Path = project_root / "sql" / "queries"
     indicator_yaml: Path = \
         project_root / "src" / "crossborderml" / "conf" / "indicators.yaml"
@@ -18,9 +19,16 @@ class PathConfig:
 
 
 @dataclass(frozen=True)
+class ValidData:
+    """Configs for validation of data"""
+    file_prefix: str = 'API_'
+
+
+@dataclass(frozen=True)
 class Config:
     """Binding them together"""
     paths: PathConfig = PathConfig()
+    validd: ValidData = ValidData()
 
 
 CFG = Config()
