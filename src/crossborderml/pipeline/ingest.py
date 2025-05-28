@@ -10,6 +10,7 @@ import requests
 import yaml
 
 from crossborderml.config import CFG
+from crossborderml.utils.io_utils import load_indicators
 
 
 def _download_indicator(name: str,
@@ -40,44 +41,6 @@ def _download_indicator(name: str,
         return False
 
 
-def _load_indicators(indicators_path: Path = CFG.paths.indicator_yaml
-                     ) -> dict[str, str]:
-    """
-    Load indicator names and codes from a YAML config file.
-
-    Returns:
-        A dict of {name: code}
-
-    Raises:
-        FileNotFoundError: if the file does not exist
-        yaml.YAMLError: if the YAML is invalid
-        KeyError: if 'INDICATORS' section is missing
-    """
-    try:
-        with open(indicators_path, 'r', encoding='utf-8') as f:
-            yaml_data = yaml.load(f, Loader=yaml.SafeLoader)
-    except FileNotFoundError as exc:
-        raise FileNotFoundError(
-            f"Indicator file not found: {indicators_path}"
-            ) from exc
-    except PermissionError as exc:
-        raise PermissionError(
-            f"Permission denied when reading: {indicators_path}"
-            ) from exc
-    except yaml.YAMLError as exc:
-        raise yaml.YAMLError(
-            f"Invalid YAML in file: {indicators_path}\nError: {exc}"
-            ) from exc
-
-    if 'INDICATORS' not in yaml_data or \
-       not isinstance(yaml_data['INDICATORS'], dict):
-        raise KeyError(
-            f"'INDICATORS' section missing or not a dict in: {indicators_path}"
-            )
-
-    return yaml_data['INDICATORS']
-
-
 def run_download(indicators_path: Path = CFG.paths.indicator_yaml,
                  dest_dir: Path = CFG.paths.raw_data_dir,
                  readme_path: Path = CFG.paths.data_readme
@@ -92,7 +55,7 @@ def run_download(indicators_path: Path = CFG.paths.indicator_yaml,
         log.write(f'Reading indicators file `{indicators_path}`  \n')
 
         try:
-            indicators = _load_indicators(indicators_path)
+            indicators = load_indicators(indicators_path, 'INDICATORS')
         except (FileNotFoundError, PermissionError,
                 yaml.YAMLError, KeyError) as exc:
             log.write(f"Failed to load indicators: {exc}\n")
