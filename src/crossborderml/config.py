@@ -11,6 +11,7 @@ class PathConfig:
     data_dir: Path = project_root / "data"
     raw_data_dir: Path = data_dir / "raw"
     processed_data_dir: Path = data_dir / "processed"
+    extracted_data_dir: Path = data_dir / "extracted"
     sql_dir: Path = project_root / "sql" / "queries"
     indicator_yaml: Path = \
         project_root / "src" / "crossborderml" / "conf" / "indicators.yaml"

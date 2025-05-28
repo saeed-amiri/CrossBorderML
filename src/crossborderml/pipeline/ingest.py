@@ -115,7 +115,7 @@ def run_download(indicators_path: Path = CFG.paths.indicator_yaml,
 
 def _unzip_all_zips(zip_dir: Path,
                     log: typing.TextIO,
-                    extract_dir: Path = CFG.paths.data_dir
+                    extract_dir: Path
                     ) -> None:
     """
     Unzips all .zip files in the given directory to `extract_dir`.
@@ -151,7 +151,7 @@ def _unzip_all_zips(zip_dir: Path,
 
 
 def run_unzip(zip_dir: Path = CFG.paths.raw_data_dir,
-              extract_dir: Path = CFG.paths.data_dir,
+              extract_dir: Path = CFG.paths.extracted_data_dir,
               log_path: Path = CFG.paths.data_readme
               ) -> None:
     """Unzip all the files"""
