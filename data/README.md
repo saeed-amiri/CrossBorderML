@@ -1,5 +1,5 @@
 
-## [2025-05-28 17:22:48.046048]:
+## [2025-05-28 18:16:38.162600]:
 Reading indicators file `/home/santiago/Documents/MyScripts/CrossBorderML/src/crossborderml/conf/indicators.yaml`  
 - Downloading 'gdp' from:
 > https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.CD?downloadformat=csv  
@@ -79,7 +79,7 @@ Reading indicators file `/home/santiago/Documents/MyScripts/CrossBorderML/src/cr
 
 Download complete. 25 succeeded, 0 failed.
 
-## [2025-05-28 17:22:59.108560]:  
+## [2025-05-28 18:16:52.380369]:  
 Unzipping files from `/home/santiago/Documents/MyScripts/CrossBorderML/data/raw`  
 Extracted `population_growth.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data/extracted`  
 Extracted `population_15_64_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data/extracted`  

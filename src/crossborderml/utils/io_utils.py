@@ -6,9 +6,9 @@ from pathlib import Path
 import yaml
 
 
-def load_indicators(yaml_path: Path,
-                    main_key: str
-                    ) -> dict[str, str]:
+def load_yaml(yaml_path: Path,
+              main_key: str
+              ) -> dict[str, str]:
     """
     Load indicator names and codes from a YAML config file.
 
@@ -18,7 +18,7 @@ def load_indicators(yaml_path: Path,
     Raises:
         FileNotFoundError: if the file does not exist
         yaml.YAMLError: if the YAML is invalid
-        KeyError: if 'INDICATORS' section is missing
+        KeyError: if 'main_key' section is missing
     """
     try:
         with open(yaml_path, 'r', encoding='utf-8') as f:

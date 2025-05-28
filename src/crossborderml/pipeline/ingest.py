@@ -10,7 +10,7 @@ import requests
 import yaml
 
 from crossborderml.config import CFG
-from crossborderml.utils.io_utils import load_indicators
+from crossborderml.utils.io_utils import load_yaml
 
 
 def _download_indicator(name: str,
@@ -55,7 +55,7 @@ def run_download(indicators_path: Path = CFG.paths.indicator_yaml,
         log.write(f'Reading indicators file `{indicators_path}`  \n')
 
         try:
-            indicators = load_indicators(indicators_path, 'INDICATORS')
+            indicators = load_yaml(indicators_path, 'INDICATORS')
         except (FileNotFoundError, PermissionError,
                 yaml.YAMLError, KeyError) as exc:
             log.write(f"Failed to load indicators: {exc}\n")
