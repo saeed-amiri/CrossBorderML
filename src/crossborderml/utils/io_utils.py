@@ -6,9 +6,7 @@ from pathlib import Path
 import yaml
 
 
-def load_yaml(yaml_path: Path,
-              main_key: str
-              ) -> dict[str, str]:
+def load_yaml(yaml_path: Path, main_key: str) -> dict[str, str]:
     """
     Load indicator names and codes from a YAML config file.
 
