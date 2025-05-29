@@ -103,10 +103,11 @@ def run_download(
                   f"{failure_count} failed.\n")
 
 
-def _unzip_all_zips(zip_dir: Path,
-                    log: TextIO,
-                    extract_dir: Path
-                    ) -> None:
+def _unzip_all_zips(
+        zip_dir: Path,
+        log: TextIO,
+        extract_dir: Path
+        ) -> None:
     """
     Unzips all .zip files in the given directory to `extract_dir`.
 
@@ -141,10 +142,11 @@ def _unzip_all_zips(zip_dir: Path,
             log.write(f"File error with `{zip_path}`: {exc}\n")
 
 
-def run_unzip(zip_dir: Path = CFG.paths.raw_data_dir,
-              extract_dir: Path = CFG.paths.extracted_data_dir,
-              log_path: Path = CFG.paths.data_readme
-              ) -> None:
+def run_unzip(
+        zip_dir: Path = CFG.paths.raw_data_dir,
+        extract_dir: Path = CFG.paths.extracted_data_dir,
+        log_path: Path = CFG.paths.data_readme
+        ) -> None:
     """Unzip all the files"""
     with open(log_path, 'a', encoding='utf-8') as log:
         log.write(f'\n## [{datetime.now()}]:  \n')
