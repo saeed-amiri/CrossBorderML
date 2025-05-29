@@ -35,7 +35,9 @@ class PathConfig:
 @dataclass(frozen=True)
 class ValidData:
     """Configs for validation of data"""
-    file_prefix: str = 'API_'
+    file_prefix: str = "API_"
+    file_suffix: str = "_DS2"
+    file_extentions: str = "csv"
 
 
 @dataclass(frozen=True)
