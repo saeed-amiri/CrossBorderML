@@ -2,7 +2,7 @@
 Download data from the sources and unzip them if needed
 """
 
-import typing
+from typing import TextIO, Callable
 from pathlib import Path
 from datetime import datetime
 import zipfile
@@ -13,38 +13,65 @@ from crossborderml.config import CFG
 from crossborderml.utils.io_utils import load_yaml
 
 
-def _download_indicator(name: str,
-                        code: str,
-                        log: typing.TextIO,
-                        dest_dir: Path
-                        ) -> bool:
-    url = \
-        f"https://api.worldbank.org/v2/en/indicator/{code}?downloadformat=csv"
-    log.write(f"- Downloading '{name}' from:\n")
-    log.write(f"> {url}  \n")
+class IndicatorDownloader:
+    """Manage downloads and saving them"""
 
-    try:
-        response = requests.get(url, timeout=60)
-        response.raise_for_status()
-    except requests.exceptions.RequestException as exc:
-        log.write(f"Failed on fetch `{name}`:  \n{exc}  ")
+    def __init__(
+            self,
+            dest_dir: Path,
+            logger: TextIO,
+            session: requests.Session | None = None,
+            ) -> None:
+        self.dest_dir = dest_dir
+        self.logger = logger
+        self.session = session or requests.Session()
 
-    try:
-        dest_dir.mkdir(parents=True, exist_ok=True)
-        zip_path = dest_dir / f"{name}.zip"
-        with open(zip_path, "wb") as f:
-            f.write(response.content)
-        log.write(f"> Saved to {zip_path}\n")
-        return True
-    except (OSError, IOError) as exc:
-        log.write(f"Failed to save: `{name}`:  \n{exc}  ")
+    def download(
+            self,
+            name: str,
+            code: str,
+            url_builder: Callable[[str], str] =
+            CFG.urls.world_bank_indicator_url,
+            timeout: float = CFG.urls.timeout,
+            ) -> bool:
+        """Attempt to download"""
+        url = url_builder(code)
+        self.logger.write(f"Downloading '{name}'\n> from {url}  \n")
+        try:
+            resp = self.session.get(url, timeout=timeout)
+            resp.raise_for_status()
+        except requests.RequestException as exc:
+            self.logger.write(f"Fetch failed for {name}:\n {exc}")
+            return False
+
+        return self.save_zip(name, resp.content)
+
+    def save_zip(
+            self,
+            name: str,
+            data: bytes
+            ) -> bool:
+        """Save the files to the destination path"""
+        try:
+            self.dest_dir.mkdir(parents=True, exist_ok=True)
+            path = self.dest_dir / f"{name}.zip"
+            path.write_bytes(data)
+            self.logger.write(f"Saved '{name}' to {path}")
+            return True
+        except PermissionError:
+            self.logger.write(f"Permission denied saving {name}")
+        except FileNotFoundError:
+            self.logger.write(f"Invalid path for {name}")
+        except OSError as exc:
+            self.logger.write(f"OS error saving {name}: {exc}")
         return False
 
 
-def run_download(indicators_path: Path = CFG.paths.indicator_yaml,
-                 dest_dir: Path = CFG.paths.raw_data_dir,
-                 readme_path: Path = CFG.paths.data_readme
-                 ) -> None:
+def run_download(
+        indicators_path: Path = CFG.paths.indicator_yaml,
+        dest_dir: Path = CFG.paths.raw_data_dir,
+        readme_path: Path = CFG.paths.data_readme
+        ) -> None:
     """Download the files selected in indicators.yaml and log results."""
 
     success_count: int = 0
@@ -60,10 +87,10 @@ def run_download(indicators_path: Path = CFG.paths.indicator_yaml,
                 yaml.YAMLError, KeyError) as exc:
             log.write(f"Failed to load indicators: {exc}\n")
             return
-
+        dl = IndicatorDownloader(dest_dir=dest_dir, logger=log)
         for name, code in indicators.items():
             try:
-                ok = _download_indicator(name, code, log, dest_dir)
+                ok = dl.download(name, code)
                 if ok:
                     success_count += 1
                 else:
@@ -77,7 +104,7 @@ def run_download(indicators_path: Path = CFG.paths.indicator_yaml,
 
 
 def _unzip_all_zips(zip_dir: Path,
-                    log: typing.TextIO,
+                    log: TextIO,
                     extract_dir: Path
                     ) -> None:
     """
@@ -110,7 +137,7 @@ def _unzip_all_zips(zip_dir: Path,
             log.write(f"Bad zip file: {zip_path}\n")
         except PermissionError:
             log.write(f"Permission denied extracting: {zip_path}\n")
-        except (OSError, IOError) as exc:
+        except OSError as exc:
             log.write(f"File error with `{zip_path}`: {exc}\n")
 
 
