@@ -36,7 +36,7 @@ class IndicatorDownloader:
             ) -> bool:
         """Attempt to download"""
         url = url_builder(code)
-        self.logger.write(f"Downloading '{name}'\n> from {url}  \n")
+        self.logger.write(f"\nDownloading '{name}' from:  \n{url}  \n")
         try:
             resp = self.session.get(url, timeout=timeout)
             resp.raise_for_status()
@@ -56,7 +56,7 @@ class IndicatorDownloader:
             self.dest_dir.mkdir(parents=True, exist_ok=True)
             path = self.dest_dir / f"{name}.zip"
             path.write_bytes(data)
-            self.logger.write(f"Saved '{name}' to {path}")
+            self.logger.write(f"Saved '{name}' to {path}  \n")
             return True
         except PermissionError:
             self.logger.write(f"Permission denied saving {name}")
