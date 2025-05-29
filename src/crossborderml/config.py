@@ -5,6 +5,20 @@ from pathlib import Path
 
 
 @dataclass(frozen=True)
+class UrlConfig:
+    """Set the main URL requests and parameters"""
+    world_bank_indicator = \
+        "https://api.worldbank.org/v2/en/indicator/{code}?downloadformat=csv"
+    timeout: float = 60.0
+
+    def world_bank_indicator_url(self,
+                                 code: str
+                                 ) -> str:
+        """Return the download URL for a given World Bank indicator code."""
+        return self.world_bank_indicator.format(code=code)
+
+
+@dataclass(frozen=True)
 class PathConfig:
     """Main paths"""
     project_root: Path = Path(__file__).resolve().parents[2]
@@ -27,6 +41,7 @@ class ValidData:
 @dataclass(frozen=True)
 class Config:
     """Binding them together"""
+    urls: UrlConfig = UrlConfig()
     paths: PathConfig = PathConfig()
     validd: ValidData = ValidData()
 
