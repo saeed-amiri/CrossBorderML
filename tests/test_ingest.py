@@ -10,7 +10,7 @@ import os
 from pathlib import Path
 import requests
 
-from crossborderml.pipeline.ingest import IndicatorDownloader
+from crossborderml.pipeline.downloader import IndicatorDownloader
 from crossborderml.config import CFG
 
 
