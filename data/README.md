@@ -131,3 +131,11 @@ Extracted `inflation.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/d
 Extracted `life_expectancy.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data/extracted`  
 Extracted `access_to_electricity.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data/extracted`  
 Extracted `population_65_plus_pct.zip` to `/home/santiago/Documents/MyScripts/CrossBorderML/data/extracted`  
+
+
+### Downloading missing files:
+Missed files `{'co2_emissions_per_capita': 'EN.ATM.CO2E.PC'}`  
+
+Downloading 'co2_emissions_per_capita' from:  
+https://api.worldbank.org/v2/en/indicator/EN.ATM.CO2E.PC?downloadformat=csv  
+Saved 'co2_emissions_per_capita' to /home/santiago/Documents/MyScripts/CrossBorderML/data/raw/co2_emissions_per_capita.zip  
