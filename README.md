@@ -5,14 +5,18 @@
 ```
 CrossBorderML/
     ├── data
+    │   ├── extracted
+    │   └── raw
     ├── notebooks
     ├── output_examples
     ├── scripts
     ├── sql
     │   └── queries
     ├── src
-    │   └── crossborderml
-    │       └── conf
+    │   ├── crossborderml
+    │   │   ├── conf
+    │   │   ├── pipeline
+    │   │   └── utils
     └── tests
 ```
 
