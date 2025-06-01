@@ -1,6 +1,6 @@
 """Setting the paths and other constant needed in scripts"""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 
@@ -41,11 +41,21 @@ class ValidData:
 
 
 @dataclass(frozen=True)
+class CsvConfig:
+    """In reading CVS files"""
+    header_rows: int = 2
+    # The columns which should be there
+    basic_cols: list[str] = \
+        field(default_factory=lambda: ["Country Name", "Country Code"])
+
+
+@dataclass(frozen=True)
 class Config:
     """Binding them together"""
     urls: UrlConfig = UrlConfig()
     paths: PathConfig = PathConfig()
     validd: ValidData = ValidData()
+    cvs: CsvConfig = CsvConfig()
 
 
 CFG = Config()
