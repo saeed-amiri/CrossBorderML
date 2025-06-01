@@ -71,6 +71,11 @@ class ValidateCsv:
                  ) -> None:
         self.csv_df = csv_df
 
+    def assert_not_empty(self) -> None:
+        """Self explanatory"""
+        if self.csv_df.shape[0] == 0:
+            raise AssertionError("DataFrame is empty (no rows).")
+
     def assert_cols(self, base_cols: list[str]) -> None:
         """Make sure the basic columns exist"""
         missing = [col for col in base_cols if col not in self.csv_df.columns]
