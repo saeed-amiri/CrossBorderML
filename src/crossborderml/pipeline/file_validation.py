@@ -10,6 +10,7 @@ import requests
 
 from crossborderml.config import CFG
 from crossborderml.utils.io_utils import load_yaml
+from crossborderml.utils.io_utils import FileFinder
 from crossborderml.pipeline.downloader import IndicatorDownloader
 
 
@@ -20,36 +21,6 @@ class IndicatorSpec:
         self.names_to_codes: dict[str, str] = \
             load_yaml(yaml_path, "INDICATORS")
         self.expected: list[str] = sorted(self.names_to_codes.values())
-
-
-class FileLister:
-    """Get the main file name (stem) of the files"""
-    # pylint: disable=too-few-public-methods
-    def __init__(self,
-                 directory: Path,
-                 prefix: str,
-                 extension: str,
-                 suffix: str
-                 ) -> None:
-        self.dir = directory
-        self.prefix = prefix
-        self.extension = extension
-        self.suffix = suffix
-
-    def list_existing(self) -> set[str]:
-        """Listing the main names"""
-        return self._drop_suffix_prefix({
-            p.stem
-            for p in self.dir.iterdir()
-            if p.is_file() and p.name.startswith(self.prefix)
-            and p.suffix == self.extension
-        })
-
-    def _drop_suffix_prefix(self, existence: set[str]) -> set[str]:
-        return {
-            item.split(self.prefix)[1].split(self.suffix)[0]
-            for item in existence
-        }
 
 
 class MissingFinder:
@@ -119,13 +90,14 @@ def main():
     """Self explanatory"""
 
     spec = IndicatorSpec(CFG.paths.indicator_yaml)
-    lister = FileLister(
-        CFG.paths.extracted_data_dir,
+    lister = FileFinder(
+        directory=CFG.paths.extracted_data_dir,
+        prefix=CFG.validd.file_prefix,
+        extension=CFG.validd.file_extentions
+        )
+    existing = lister.get_file_names(
         CFG.validd.file_prefix,
-        ".csv",
         CFG.validd.file_suffix)
-    existing = lister.list_existing()
-
     finder = MissingFinder(set(spec.expected), existing)
     missing = finder.missing(spec.names_to_codes)
 

@@ -7,28 +7,7 @@ from pathlib import Path
 import pandas as pd
 
 from crossborderml.config import CFG
-
-
-class FileLister:
-    """
-    List all the files in a directory that start with a given
-    prefix.
-    """
-    # pylint: disable=too-few-public-methods
-    def __init__(self,
-                 directory: Path,
-                 prefix: str,
-                 ) -> None:
-        self.dir = directory
-        self.prefix = prefix
-
-    def list_existing(self) -> set[Path]:
-        """Listing the main names"""
-        return {
-            p
-            for p in self.dir.iterdir()
-            if p.is_file() and p.name.startswith(self.prefix)
-        }
+from crossborderml.utils.io_utils import FileFinder
 
 
 class ReadCsv:
@@ -85,11 +64,12 @@ class ValidateCsv:
 
 def main() -> None:
     """Self explanatory"""
-    get_files: FileLister = FileLister(
+    get_files: FileFinder = FileFinder(
         directory=CFG.paths.extracted_data_dir,
-        prefix=CFG.validd.file_prefix
-    )
-    csv_files: set[Path] = get_files.list_existing()
+        prefix=CFG.validd.file_prefix,
+        )
+
+    csv_files: set[Path] = get_files.get_file_paths()
     for fpath in csv_files:
         csv = ReadCsv(fpath, CFG.cvs.header_rows)
         valid_df = ValidateCsv(csv.df)
