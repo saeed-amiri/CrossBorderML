@@ -50,12 +50,19 @@ class CsvConfig:
 
 
 @dataclass(frozen=True)
+class SqlConfig:
+    """Configs for the SQL queries"""
+    queries_dir: Path = PathConfig().project_root / "sql" / "queries"
+
+
+@dataclass(frozen=True)
 class Config:
     """Binding them together"""
     urls: UrlConfig = UrlConfig()
     paths: PathConfig = PathConfig()
     validd: ValidData = ValidData()
     cvs: CsvConfig = CsvConfig()
+    sql: SqlConfig = SqlConfig()
 
 
 CFG = Config()

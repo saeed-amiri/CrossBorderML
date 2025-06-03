@@ -2,7 +2,7 @@
 Downloading data and updating README file
 """
 
-from crossborderml.pipeline.ingest import run_download
+from crossborderml.pipeline.fetch_extract import run_download
 
 
 if __name__ == "__main__":
