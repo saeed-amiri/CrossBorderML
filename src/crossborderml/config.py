@@ -52,6 +52,7 @@ class CsvConfig:
 @dataclass(frozen=True)
 class SqlConfig:
     """Configs for the SQL queries"""
+    db_url: str = f"sqlite:///{PathConfig().project_root/'data'/'mydb.sqlite'}"
     queries_dir: Path = PathConfig().project_root / "sql" / "queries"
 
 
