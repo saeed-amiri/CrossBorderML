@@ -62,7 +62,7 @@ class Config:
     urls: UrlConfig = UrlConfig()
     paths: PathConfig = PathConfig()
     validd: ValidData = ValidData()
-    cvs: CsvConfig = CsvConfig()
+    csv: CsvConfig = CsvConfig()
     sql: SqlConfig = SqlConfig()
 
 

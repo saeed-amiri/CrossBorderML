@@ -69,7 +69,9 @@ def get_files() -> set[Path]:
 
 def derive_table_name(csv_path: Path) -> str:
     """Return a name for the table based on the stem."""
-    return f"{csv_path.stem}_wide"
+    raw: str = f"{csv_path.stem}_wide"
+    cleaned: str = "".join(c if c.isalnum() or c == "_" else "_" for c in raw)
+    return cleaned
 
 
 def get_engine(db_url: str) -> Engine:
@@ -91,8 +93,13 @@ def main() -> None:
         table_name = derive_table_name(csv_path)
         print(f"- CSV: {csv_path.name}  →  Table: {table_name}")
 
+        df_i: pd.DataFrame = pd.read_csv(csv_path, header=CFG.csv.header_rows)
+
         with engine.begin() as conn:
-            conn.execute(text("SELECT 1"))
+            conn.execute(text(f"DROP TABLE IF EXISTS {table_name}"))
+            df_i.to_sql(table_name, con=conn, if_exists="replace", index=False)
+        del df_i
+
         print(f"[OK] Connection and transaction test for table '{table_name}'"
               " succeeded.\n")
 
