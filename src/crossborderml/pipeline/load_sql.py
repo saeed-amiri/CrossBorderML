@@ -57,7 +57,7 @@ def get_engine(db_url: str) -> Engine:
     return create_engine(db_url)
 
 
-def main() -> None:
+def load_all_wide_tables() -> None:
     """self explanatory"""
     csv_files: set[Path] = get_files()
 
@@ -80,4 +80,4 @@ def main() -> None:
 
 
 if __name__ == '__main__':
-    main()
+    load_all_wide_tables()
