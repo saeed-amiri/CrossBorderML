@@ -50,6 +50,10 @@ which failed.
 
 from pathlib import Path
 
+import pandas as pd
+from sqlalchemy import create_engine, text
+from sqlalchemy.engine import Engine
+
 from crossborderml.config import CFG
 from crossborderml.utils.io_utils import FileFinder
 
@@ -63,10 +67,34 @@ def get_files() -> set[Path]:
     return csv_finder.get_file_paths()
 
 
+def derive_table_name(csv_path: Path) -> str:
+    """Return a name for the table based on the stem."""
+    return f"{csv_path.stem}_wide"
+
+
+def get_engine(db_url: str) -> Engine:
+    """
+    Create (or return a cached) SQLAlchemy engine based on
+    CFG.sql.db_url
+    """
+    return create_engine(db_url)
+
+
 def main() -> None:
     """self explanatory"""
-    cvs_files: set[Path] = get_files()
-    print(cvs_files)
+    csv_files: set[Path] = get_files()
+
+    engine: Engine = get_engine(CFG.sql.db_url)
+    print(f"Using database URL: {CFG.sql.db_url}")
+
+    for csv_path in sorted(csv_files):
+        table_name = derive_table_name(csv_path)
+        print(f"- CSV: {csv_path.name}  →  Table: {table_name}")
+
+        with engine.begin() as conn:
+            conn.execute(text("SELECT 1"))
+        print(f"[OK] Connection and transaction test for table '{table_name}'"
+              " succeeded.\n")
 
 
 if __name__ == '__main__':
