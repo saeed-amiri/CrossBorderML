@@ -71,9 +71,9 @@ def main() -> None:
 
     csv_files: set[Path] = get_files.get_file_paths()
     for fpath in csv_files:
-        csv = ReadCsv(fpath, CFG.cvs.header_rows)
+        csv = ReadCsv(fpath, CFG.csv.header_rows)
         valid_df = ValidateCsv(csv.df)
-        valid_df.assert_cols(CFG.cvs.basic_cols)
+        valid_df.assert_cols(CFG.csv.basic_cols)
 
 
 if __name__ == '__main__':
