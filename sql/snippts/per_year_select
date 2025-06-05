@@ -1,0 +1,6 @@
+SELECT
+  "Country Code"   AS country_code,
+  {year}             AS year,
+  "{year}"           AS value
+FROM {wide_table}
+WHERE "{year}" IS NOT NULL
