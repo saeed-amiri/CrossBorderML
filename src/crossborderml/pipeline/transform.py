@@ -7,7 +7,7 @@ transform.py only defines „how”, and the outer code decides
 """
 
 from pathlib import Path
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 
 from crossborderml.config import CFG
@@ -74,24 +74,40 @@ class PivotOneIndicator:
             all those SELECTs.
         Returns a single SQL string ready for execution.
         """
-        drop_line = f"DROP TABLE IF EXISTS {self.long_table};"
         create_line = f"CREATE TABLE {self.long_table} AS"
         # Join all SELECT clauses with “UNION ALL”
         union_block = "\nUNION ALL\n".join(select_clauses)
         # Put it all together
-        full_sql = f"{drop_line}\n{create_line}\n{union_block};"
+        full_sql = f"{create_line}\n{union_block};"
         return full_sql
 
+    def execute_union(self, full_sql: str) -> None:
+        """
+        create the long table
+        """
+        drop_line = f"DROP TABLE IF EXISTS {self.long_table};"
+        with self.engine.begin() as conn:
+            conn.execute(text(drop_line))
+            conn.execute(text(full_sql))
+            
 
-def create_long_table() -> None:
-    """Orchestrate function"""
+
+def create_long_table(wide_table: str) -> None:
+    """
+    Orchestrates:
+      1. Building the per-year SELECT clauses
+      2. Assembling them into one UNION ALL + CREATE TABLE
+      3. Executing that SQL so the <Indicator>_long table
+      appears.
+    """
     pivot = PivotOneIndicator(
-        "GDP_wide",
-        CFG.sql.db_url,
-        CFG.sql.snippts_dir / "per_year_select")
+        wide_table=wide_table,
+        db_url=CFG.sql.db_url,
+        snipt_path=CFG.sql.snippts_dir / "per_year_select")
     cluases: list[str] = pivot.build_select_cluses()
     main_sql = pivot.assemble_union_query(cluases)
+    pivot.execute_union(main_sql)
 
 
 if __name__ == '__main__':
-    create_long_table()
+    create_long_table("API_SP_POP_65UP_TO_ZS_DS2_en_csv_v2_87627_wide")
