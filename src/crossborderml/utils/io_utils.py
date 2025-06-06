@@ -131,3 +131,9 @@ class FileFinder:
             names.add(stem)
 
         return names
+
+
+def get_snippet(snipt: Path) -> str:
+    """Read and return the snippet"""
+    with open(snipt, 'r', encoding='utf-8') as sql:
+        return ''.join(sql.readlines())

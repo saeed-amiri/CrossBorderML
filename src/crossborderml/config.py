@@ -54,7 +54,7 @@ class SqlConfig:
     """Configs for the SQL queries"""
     db_url: str = f"sqlite:///{PathConfig().project_root/'data'/'mydb.sqlite'}"
     queries_dir: Path = PathConfig().project_root / "sql" / "queries"
-    snippts_dir: Path = PathConfig().project_root / "sql" / "snippts"
+    snippets_dir: Path = PathConfig().project_root / "sql" / "snippets"
     year_range: tuple[int, int] = (1960, 2026)
 
 
