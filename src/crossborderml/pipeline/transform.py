@@ -11,6 +11,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 
 from crossborderml.config import CFG
+from crossborderml.utils import io_utils
 
 
 class PivotOneIndicator:
@@ -37,7 +38,7 @@ class PivotOneIndicator:
         self.engine: Engine = create_engine(db_url)
         self.year_column: list[str] = \
             [str(y) for y in range(*CFG.sql.year_range)]
-        self.sql_select: str = get_snippt(snipt_path)
+        self.sql_select: str = io_utils.get_snippet(snipt_path)
 
     def build_select_clause(self) -> list[str]:
         """
@@ -83,12 +84,6 @@ class PivotOneIndicator:
         with self.engine.begin() as conn:
             conn.execute(text(drop_line))
             conn.execute(text(full_sql))
-
-
-def get_snippt(snipt: Path) -> str:
-    """Read and return the snippt"""
-    with open(snipt, 'r', encoding='utf-8') as sql:
-        return ''.join(sql.readlines())
 
 
 def create_long_table(wide_table: str) -> None:
