@@ -45,7 +45,7 @@ class PivotOneIndicator:
         with open(snipt, 'r', encoding='utf-8') as sql:
             return ''.join(sql.readlines())
 
-    def build_select_cluses(self) -> list[str]:
+    def build_select_clause(self) -> list[str]:
         """
         For each year in self.year_column, format the SQL
         snippet so that {country_code} → "Country Code",
@@ -104,8 +104,8 @@ def create_long_table(wide_table: str) -> None:
         wide_table=wide_table,
         db_url=CFG.sql.db_url,
         snipt_path=CFG.sql.snippts_dir / "per_year_select")
-    cluases: list[str] = pivot.build_select_cluses()
-    main_sql = pivot.assemble_union_query(cluases)
+    clauses: list[str] = pivot.build_select_clause()
+    main_sql = pivot.assemble_union_query(clauses)
     pivot.execute_union(main_sql)
 
 
