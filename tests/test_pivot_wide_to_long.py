@@ -42,7 +42,7 @@ def test_pivot_one_indicator(monkeypatch, setup_sqlite_and_snippt):
     db_path, snippt_path, DummyCFG = setup_sqlite_and_snippt
 
     # Patch CFG in the module
-    import crossborderml.pipeline.transform as transform_mod
+    import crossborderml.pipeline.pivot_wide_to_long as transform_mod
     monkeypatch.setattr(transform_mod, "CFG", DummyCFG)
 
     pivot = transform_mod.PivotOneIndicator(
