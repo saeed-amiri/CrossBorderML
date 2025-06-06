@@ -89,7 +89,7 @@ class PivotOneIndicator:
         with self.engine.begin() as conn:
             conn.execute(text(drop_line))
             conn.execute(text(full_sql))
-            
+
 
 
 def create_long_table(wide_table: str) -> None:
