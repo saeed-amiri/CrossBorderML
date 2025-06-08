@@ -67,6 +67,28 @@ def get_all_countries(
     return countries_per_table
 
 
+def sanity_check_names(
+        countries_dict: dict[str, set[tuple[str, str, str]]]
+        ) -> dict[str, set[tuple[str, str, str]]]:
+    """
+    Check if all the files have the same countries
+    The first item from the value tuple should be similar
+    """
+    country_sets = {}
+    for key, value in countries_dict.items():
+        countries = {country for _, country, _ in value}
+        print(key, len(countries))
+        country_sets[key] = countries
+
+    countries_list: list[set[str]] = list(country_sets.values())
+    if len(set(tuple(sorted(c)) for c in countries_list)) == 1:
+        print('WE ARE DOING FINE!')
+    else:
+        print("Differences found:")
+
+    return countries_dict
+
+
 if __name__ == '__main__':
     sql_engine: Engine = create_engine(CFG.sql.db_url)
     csv_files: set[Path] = get_files()
@@ -75,3 +97,4 @@ if __name__ == '__main__':
         get_all_tables(csv_files, 'wide')
     all_countries: dict[str, set[tuple[str, str, str]]] = get_all_countries(
         sql_engine, CFG.sql.snippets_dir / 'countries_name', all_tables)
+    sanity_check_names(all_countries)
