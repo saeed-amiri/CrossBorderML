@@ -31,6 +31,7 @@ from sqlalchemy.engine import Engine
 
 from crossborderml.config import CFG
 from crossborderml.utils.io_utils import FileFinder
+from crossborderml.utils.string_utils import derive_table_name
 
 
 def get_files() -> set[Path]:
@@ -40,13 +41,6 @@ def get_files() -> set[Path]:
         prefix=CFG.validd.file_prefix,
         extension=CFG.validd.file_extentions)
     return csv_finder.get_file_paths()
-
-
-def derive_table_name(csv_path: Path) -> str:
-    """Return a name for the table based on the stem."""
-    raw: str = f"{csv_path.stem}_wide"
-    cleaned: str = "".join(c if c.isalnum() or c == "_" else "_" for c in raw)
-    return cleaned
 
 
 def get_engine(db_url: str) -> Engine:
@@ -65,7 +59,7 @@ def load_all_wide_tables() -> None:
     print(f"Using database URL: {CFG.sql.db_url}")
 
     for csv_path in sorted(csv_files):
-        table_name = derive_table_name(csv_path)
+        table_name = derive_table_name(csv_path, suffix='wide')
         print(f"- CSV: {csv_path.name}  →  Table: {table_name}")
 
         df_i: pd.DataFrame = pd.read_csv(csv_path, header=CFG.csv.header_rows)

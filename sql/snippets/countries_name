@@ -1,0 +1,3 @@
+SELECT
+    "Country Name","Country Code","Indicator Code"
+FROM {table};
