@@ -55,16 +55,16 @@ def get_all_countries(
         with country info.
     """
     snippet: str = get_snippet(snipt_path)
-    all_dicts: dict[str, set[tuple[str, str, str]]] = {}
+    countries_per_table: dict[str, set[tuple[str, str, str]]] = {}
 
     for table in in_tables:
         sql_text = snippet.format(table=table)
         with engine.begin() as conn:
             results = conn.execute(text(sql_text))
             rows = results.fetchall()
-            all_dicts[table] = {tuple(row) for row in rows}
+            countries_per_table[table] = {tuple(row) for row in rows}
 
-    return all_dicts
+    return countries_per_table
 
 
 if __name__ == '__main__':
@@ -73,5 +73,5 @@ if __name__ == '__main__':
 
     all_tables: list[str] = \
         get_all_tables(csv_files, 'wide')
-    get_all_countries(
+    all_countries: dict[str, set[tuple[str, str, str]]] = get_all_countries(
         sql_engine, CFG.sql.snippets_dir / 'countries_name', all_tables)
