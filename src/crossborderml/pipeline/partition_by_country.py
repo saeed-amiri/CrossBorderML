@@ -1,6 +1,7 @@
 """A side module to make table for each country"""
 
 from pathlib import Path
+from collections import Counter
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 
@@ -67,26 +68,67 @@ def get_all_countries(
     return countries_per_table
 
 
+def get_black_sheep(data: dict[str, set[str]]) -> list[str]:
+    """
+    Identify all 'black sheep' in the dataset — keys whose
+    associated sets have a length that is unique (occurs
+    only once).
+
+    Parameters:
+        data (dict[str, set[str]]): Dictionary mapping keys
+        to sets.
+
+    Returns:
+        list[str]: List of keys corresponding to unique-length
+        sets.
+    """
+    # Step 1: Compute the length of each set
+    lengths = {key: len(value_set) for key, value_set in data.items()}
+
+    # Step 2: Count how many times each length occurs
+    length_counts = Counter(lengths.values())
+
+    # Step 3: Identify all lengths that occur only once
+    unique_lengths = {length for length, count in
+                      length_counts.items() if count == 1}
+
+    # Step 4: Return all keys with one of the unique lengths
+    return [key for key, length in lengths.items() if length in unique_lengths]
+
+
 def sanity_check_names(
         countries_dict: dict[str, set[tuple[str, str, str]]]
         ) -> dict[str, set[tuple[str, str, str]]]:
     """
-    Check if all the files have the same countries
-    The first item from the value tuple should be similar
+    Filter out files whose country lists deviate from the
+    others.
+
+    The function assumes that the second element of each
+    tuple is the country name.
+    It uses set length comparison to detect outliers (black
+    sheep).
+    Parameters:
+        countries_dict (dict[str, set[tuple]]): Mapping of
+        filename -> set of (id, country, value)
+    Returns:
+        dict[str, set[tuple]]: Filtered dictionary excluding
+        black sheep files
     """
-    country_sets = {}
-    for key, value in countries_dict.items():
-        countries = {country for _, country, _ in value}
-        print(key, len(countries))
-        country_sets[key] = countries
 
-    countries_list: list[set[str]] = list(country_sets.values())
-    if len(set(tuple(sorted(c)) for c in countries_list)) == 1:
-        print('WE ARE DOING FINE!')
-    else:
-        print("Differences found:")
+    country_sets: dict[str, set[str]] = {
+        key: {country for _, country, _ in entries}
+        for key, entries in countries_dict.items()
+    }
 
-    return countries_dict
+    black_sheep_keys = get_black_sheep(country_sets)
+
+    if black_sheep_keys:
+        print(f"Files with inconsistent country sets: {black_sheep_keys}")
+
+    return {
+        key: entries for key, entries in countries_dict.items()
+        if key not in black_sheep_keys
+    }
 
 
 if __name__ == '__main__':
@@ -97,4 +139,4 @@ if __name__ == '__main__':
         get_all_tables(csv_files, 'wide')
     all_countries: dict[str, set[tuple[str, str, str]]] = get_all_countries(
         sql_engine, CFG.sql.snippets_dir / 'countries_name', all_tables)
-    sanity_check_names(all_countries)
+    all_countries = sanity_check_names(all_countries)
