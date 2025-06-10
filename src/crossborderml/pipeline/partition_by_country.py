@@ -96,6 +96,15 @@ def get_black_sheep(data: dict[str, set[str]]) -> list[str]:
     return [key for key, length in lengths.items() if length in unique_lengths]
 
 
+def get_country_set(countries_dict: dict[str, set[tuple[str, str, str]]]
+                    ) -> dict[str, set[str]]:
+    """return the dict with only the countries id"""
+    return {
+        key: {country for country, _, _ in entries}
+        for key, entries in countries_dict.items()
+    }
+
+
 def sanity_check_names(
         countries_dict: dict[str, set[tuple[str, str, str]]]
         ) -> dict[str, set[tuple[str, str, str]]]:
@@ -115,10 +124,7 @@ def sanity_check_names(
         black sheep files
     """
 
-    country_sets: dict[str, set[str]] = {
-        key: {country for _, country, _ in entries}
-        for key, entries in countries_dict.items()
-    }
+    country_sets: dict[str, set[str]] = get_country_set(countries_dict)
 
     black_sheep_keys = get_black_sheep(country_sets)
 
