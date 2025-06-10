@@ -155,10 +155,10 @@ def create_table_country() -> None:
     sql_engine: Engine = create_engine(CFG.sql.db_url)
     csv_files: set[Path] = get_files()
 
-    all_tables: list[str] = \
+    all_in_tables: list[str] = \
         get_all_tables(csv_files, 'wide')
     all_columns: dict[str, set[tuple[str, str, str]]] = get_main_columns(
-        sql_engine, CFG.sql.snippets_dir / 'countries_name', all_tables)
+        sql_engine, CFG.sql.snippets_dir / 'countries_name', all_in_tables)
     all_columns = sanity_check_names(all_columns)
     table_names: set[str] = mk_tables_name(all_columns)
 
