@@ -36,7 +36,7 @@ def get_all_tables(files: set[Path], suffix: str) -> list[str]:
     return tables
 
 
-def get_all_countries(
+def get_main_columns(
         engine: Engine,
         snipt_path: Path,
         in_tables: list[str]
@@ -56,16 +56,16 @@ def get_all_countries(
         with country info.
     """
     snippet: str = get_snippet(snipt_path)
-    countries_per_table: dict[str, set[tuple[str, str, str]]] = {}
+    columns_per_table: dict[str, set[tuple[str, str, str]]] = {}
 
     for table in in_tables:
         sql_text = snippet.format(table=table)
         with engine.begin() as conn:
             results = conn.execute(text(sql_text))
             rows = results.fetchall()
-            countries_per_table[table] = {tuple(row) for row in rows}
+            columns_per_table[table] = {tuple(row) for row in rows}
 
-    return countries_per_table
+    return columns_per_table
 
 
 def get_black_sheep(data: dict[str, set[str]]) -> list[str]:
@@ -138,6 +138,6 @@ if __name__ == '__main__':
 
     all_tables: list[str] = \
         get_all_tables(csv_files, 'wide')
-    all_countries: dict[str, set[tuple[str, str, str]]] = get_all_countries(
+    all_countries: dict[str, set[tuple[str, str, str]]] = get_main_columns(
         sql_engine, CFG.sql.snippets_dir / 'countries_name', all_tables)
     all_countries = sanity_check_names(all_countries)
