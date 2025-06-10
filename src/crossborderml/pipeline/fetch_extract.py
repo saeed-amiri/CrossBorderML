@@ -79,14 +79,15 @@ def _unzip_all_zips(
         try:
             with zipfile.ZipFile(zip_path, 'r') as zip_ref:
                 zip_ref.extractall(extract_dir)
-                log.write(
-                    f"Extracted `{zip_path.name}` to `{extract_dir}`  \n")
         except zipfile.BadZipFile:
             log.write(f"Bad zip file: {zip_path}\n")
         except PermissionError:
             log.write(f"Permission denied extracting: {zip_path}\n")
         except OSError as exc:
             log.write(f"File error with `{zip_path}`: {exc}\n")
+        else:
+            log.write(
+                f"Extracted `{zip_path.name}` to `{extract_dir}`  \n")
 
 
 def run_unzip(

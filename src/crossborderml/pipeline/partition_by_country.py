@@ -36,7 +36,7 @@ def get_all_tables(files: set[Path], suffix: str) -> list[str]:
     return tables
 
 
-def get_all_countries(
+def get_main_columns(
         engine: Engine,
         snipt_path: Path,
         in_tables: list[str]
@@ -56,16 +56,16 @@ def get_all_countries(
         with country info.
     """
     snippet: str = get_snippet(snipt_path)
-    countries_per_table: dict[str, set[tuple[str, str, str]]] = {}
+    columns_per_table: dict[str, set[tuple[str, str, str]]] = {}
 
     for table in in_tables:
         sql_text = snippet.format(table=table)
         with engine.begin() as conn:
             results = conn.execute(text(sql_text))
             rows = results.fetchall()
-            countries_per_table[table] = {tuple(row) for row in rows}
+            columns_per_table[table] = {tuple(row) for row in rows}
 
-    return countries_per_table
+    return columns_per_table
 
 
 def get_black_sheep(data: dict[str, set[str]]) -> list[str]:
@@ -96,6 +96,18 @@ def get_black_sheep(data: dict[str, set[str]]) -> list[str]:
     return [key for key, length in lengths.items() if length in unique_lengths]
 
 
+def get_country_set(
+        countries_dict: dict[str, set[tuple[str, str, str]]]
+        ) -> dict[str, set[str]]:
+    """
+    return the dict with only the ids of the countries
+    """
+    return {
+        key: {country for _, country, _ in entries}
+        for key, entries in countries_dict.items()
+    }
+
+
 def sanity_check_names(
         countries_dict: dict[str, set[tuple[str, str, str]]]
         ) -> dict[str, set[tuple[str, str, str]]]:
@@ -115,15 +127,13 @@ def sanity_check_names(
         black sheep files
     """
 
-    country_sets: dict[str, set[str]] = {
-        key: {country for _, country, _ in entries}
-        for key, entries in countries_dict.items()
-    }
+    country_sets: dict[str, set[str]] = get_country_set(countries_dict)
 
     black_sheep_keys = get_black_sheep(country_sets)
 
     if black_sheep_keys:
-        print(f"Files with inconsistent country sets: {black_sheep_keys}")
+        print(f"Files with inconsistent country sets: {black_sheep_keys}"
+              " -> droped!")
 
     return {
         key: entries for key, entries in countries_dict.items()
@@ -131,12 +141,27 @@ def sanity_check_names(
     }
 
 
-if __name__ == '__main__':
+def mk_tables_name(
+        data: dict[str, set[tuple[str, str, str]]]
+        ) -> set[str]:
+    """Get a set of all the countries"""
+    countries_name: dict[str, set[str]] = get_country_set(data)
+    first_key = next(iter(countries_name))
+    return {f"country_{code}_wide" for code in countries_name[first_key]}
+
+
+def create_table_country() -> None:
+    """Orchestrate the actions"""
     sql_engine: Engine = create_engine(CFG.sql.db_url)
     csv_files: set[Path] = get_files()
 
-    all_tables: list[str] = \
+    all_in_tables: list[str] = \
         get_all_tables(csv_files, 'wide')
-    all_countries: dict[str, set[tuple[str, str, str]]] = get_all_countries(
-        sql_engine, CFG.sql.snippets_dir / 'countries_name', all_tables)
-    all_countries = sanity_check_names(all_countries)
+    all_columns: dict[str, set[tuple[str, str, str]]] = get_main_columns(
+        sql_engine, CFG.sql.snippets_dir / 'countries_name', all_in_tables)
+    all_columns = sanity_check_names(all_columns)
+    table_names: set[str] = mk_tables_name(all_columns)
+
+
+if __name__ == '__main__':
+    create_table_country()

@@ -67,21 +67,24 @@ class RecoveryRunner:
             for name, code in self.missing.items():
                 try:
                     dl.download(name, code)
-                    file_path = self.raw_dir / (name + '.zip')
-
-                    if file_path and str(file_path).endswith('.zip'):
-                        self.unzip(name, log)
                 except (requests.exceptions.RequestException, OSError) as exc:
                     log.write(
                         f"Error downloading or unzipping '{name}': {exc}\n")
+                else:
+                    file_path = self.raw_dir / (name + '.zip')
+                    if file_path and str(file_path).endswith('.zip'):
+                        self.unzip(file_path, log)
+                    else:
+                        log.write(
+                            f"Warning: Downloaded '{name}' but it's not a "
+                            f"valid zip file at {file_path}\n")
 
-    def unzip(self, name: str, log: TextIO) -> None:
+    def unzip(self, zip_path: Path, log: TextIO) -> None:
         """Self explanatory"""
-        zip_path = self.raw_dir / f"{name}.zip"
         try:
             with zipfile.ZipFile(zip_path, "r") as zf:
                 zf.extractall(self.extract_dir)
-            log.write(f"Unzipped {name}")
+            log.write(f"Unzipped {zip_path}")
         except (zipfile.BadZipFile, zipfile.BadZipFile):
             log.write(f"Corrupt zip: {zip_path}")
 
