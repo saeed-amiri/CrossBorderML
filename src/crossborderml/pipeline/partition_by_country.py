@@ -123,7 +123,8 @@ def sanity_check_names(
     black_sheep_keys = get_black_sheep(country_sets)
 
     if black_sheep_keys:
-        print(f"Files with inconsistent country sets: {black_sheep_keys}")
+        print(f"Files with inconsistent country sets: {black_sheep_keys}"
+              " -> droped!")
 
     return {
         key: entries for key, entries in countries_dict.items()
