@@ -96,8 +96,9 @@ def get_black_sheep(data: dict[str, set[str]]) -> list[str]:
     return [key for key, length in lengths.items() if length in unique_lengths]
 
 
-def get_country_set(countries_dict: dict[str, set[tuple[str, str, str]]]
-                    ) -> dict[str, set[str]]:
+def get_country_set(
+        countries_dict: dict[str, set[tuple[str, str, str]]]
+        ) -> dict[str, set[str]]:
     """return the dict with only the countries id"""
     return {
         key: {country for country, _, _ in entries}
@@ -138,12 +139,27 @@ def sanity_check_names(
     }
 
 
-if __name__ == '__main__':
+def mk_tables_name(
+        data: dict[str, set[tuple[str, str, str]]]
+        ) -> set[str]:
+    """Get a set of all the countries"""
+    countries_name: dict[str, set[str]] = get_country_set(data)
+    first_key = next(iter(countries_name))
+    return countries_name[first_key]
+
+
+def create_table_country() -> None:
+    """Orchestrate the actions"""
     sql_engine: Engine = create_engine(CFG.sql.db_url)
     csv_files: set[Path] = get_files()
 
     all_tables: list[str] = \
         get_all_tables(csv_files, 'wide')
-    all_countries: dict[str, set[tuple[str, str, str]]] = get_main_columns(
+    all_columns: dict[str, set[tuple[str, str, str]]] = get_main_columns(
         sql_engine, CFG.sql.snippets_dir / 'countries_name', all_tables)
-    all_countries = sanity_check_names(all_countries)
+    all_columns = sanity_check_names(all_columns)
+    country_names: set[str] = mk_tables_name(all_columns)
+
+
+if __name__ == '__main__':
+    create_table_country()
