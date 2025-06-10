@@ -99,9 +99,11 @@ def get_black_sheep(data: dict[str, set[str]]) -> list[str]:
 def get_country_set(
         countries_dict: dict[str, set[tuple[str, str, str]]]
         ) -> dict[str, set[str]]:
-    """return the dict with only the countries id"""
+    """
+    return the dict with only the ids of the countries
+    """
     return {
-        key: {country for country, _, _ in entries}
+        key: {country for _, country, _ in entries}
         for key, entries in countries_dict.items()
     }
 
@@ -145,7 +147,7 @@ def mk_tables_name(
     """Get a set of all the countries"""
     countries_name: dict[str, set[str]] = get_country_set(data)
     first_key = next(iter(countries_name))
-    return countries_name[first_key]
+    return {f"country_{code}_wide" for code in countries_name[first_key]}
 
 
 def create_table_country() -> None:
@@ -158,7 +160,7 @@ def create_table_country() -> None:
     all_columns: dict[str, set[tuple[str, str, str]]] = get_main_columns(
         sql_engine, CFG.sql.snippets_dir / 'countries_name', all_tables)
     all_columns = sanity_check_names(all_columns)
-    country_names: set[str] = mk_tables_name(all_columns)
+    table_names: set[str] = mk_tables_name(all_columns)
 
 
 if __name__ == '__main__':
