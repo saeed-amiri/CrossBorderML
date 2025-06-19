@@ -160,15 +160,15 @@ class CreateCountryWideTables:
 
     def __init__(self,
                  engine: Engine,
-                 wide_tables: set[str],
+                 tables_name: set[str],
                  countries_indicators: dict[str, set[str]],
                  const_str  # CFG.validd
                  ) -> None:
         self.engine = engine
-        self.wide_tables = wide_tables
+        self.tables_name = tables_name
         self.const_str = const_str
-        self.indicators: list[str] = \
-            self.get_indicators(list(countries_indicators.keys()))
+        self.in_tables: list[str] = list(countries_indicators.keys())
+        self.indicators: list[str] = self.get_indicators(self.in_tables)
         self.countries_code: set[str] = \
             next(iter(countries_indicators.values()))
 
@@ -187,7 +187,7 @@ class CreateCountryWideTables:
             ) -> list[str]:
         """make a sql text for each country"""
         selects: list[str] = []
-        for wt, indicator in zip(self.wide_tables, self.indicators):
+        for wt, indicator in zip(self.in_tables, self.indicators):
             selects.append(sql_temp.format(
                 indicator=indicator,
                 year_columns=years,
@@ -221,12 +221,12 @@ def create_tables() -> None:
     all_columns: dict[str, set[tuple[str, str, str]]] = get_main_columns(
         sql_engine, CFG.sql.snippets_dir / 'countries_name', all_in_tables)
     all_columns = sanity_check_names(all_columns)
-    table_names: set[str] = mk_tables_name(all_columns)
+    tables_name: set[str] = mk_tables_name(all_columns)
     countries_indicators: dict[str, set[str]] = get_country_set(all_columns)
 
     country_tables = CreateCountryWideTables(
         engine=sql_engine,
-        wide_tables=table_names,
+        tables_name=tables_name,
         countries_indicators=countries_indicators,
         const_str=CFG.validd
         )
