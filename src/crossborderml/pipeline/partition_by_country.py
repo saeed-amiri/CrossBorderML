@@ -178,6 +178,7 @@ class CreateCountryWideTables:
         year_cols: str = self.get_years(year_range)
         for country_code in self.countries_code:
             selects = self.mk_country(country_code, year_cols, sql_temp)
+            union_block = "\nUNION ALL\n".join(selects)
 
     def mk_country(
             self,
