@@ -150,7 +150,69 @@ def mk_tables_name(
     return {f"country_{code}_wide" for code in countries_name[first_key]}
 
 
-def create_table_country() -> None:
+class CreateCountryWideTables:
+    """
+    Build and execute the SQL that creates
+    `country_<country_code>_wide`, which stacks one row per
+    indicator (from each wide_table) containing only that
+    country's data.
+    """
+
+    def __init__(self,
+                 engine: Engine,
+                 tables_name: set[str],
+                 countries_indicators: dict[str, set[str]],
+                 const_str  # CFG.validd
+                 ) -> None:
+        self.engine = engine
+        self.tables_name = tables_name
+        self.const_str = const_str
+        self.in_tables: list[str] = list(countries_indicators.keys())
+        self.indicators: list[str] = self.get_indicators(self.in_tables)
+        self.countries_code: set[str] = \
+            next(iter(countries_indicators.values()))
+
+    def create(self, snippet_path: Path, year_range: tuple[int, int]) -> None:
+        """self explanytory"""
+        sql_temp: str = get_snippet(snippet_path)
+        year_cols: str = self.get_years(year_range)
+        for country_code in self.countries_code:
+            selects = self.mk_country(country_code, year_cols, sql_temp)
+            union_block = "\nUNION ALL\n".join(selects)
+
+    def mk_country(
+            self,
+            country_code: str,
+            years: str,
+            sql_temp: str
+            ) -> list[str]:
+        """make a sql text for each country"""
+        selects: list[str] = []
+        for wt, indicator in zip(self.in_tables, self.indicators):
+            selects.append(sql_temp.format(
+                indicator=indicator,
+                year_columns=years,
+                wide_table=wt,
+                country_code=country_code
+            ))
+        return selects
+
+    def get_years(self, year_range: tuple[int, int]) -> str:
+        """return columns of years """
+        years = [str(y) for y in range(*year_range)]
+        return ", ".join(f'"{y}"' for y in years)
+
+    def get_indicators(self,
+                       raw_keys: list[str]) -> list[str]:
+        """Get the indicator of each file"""
+        return [
+            item
+            .split(self.const_str.file_prefix)[1]
+            .split(self.const_str.file_suffix)[0]
+            for item in raw_keys]
+
+
+def create_tables() -> None:
     """Orchestrate the actions"""
     sql_engine: Engine = create_engine(CFG.sql.db_url)
     csv_files: set[Path] = get_files()
@@ -160,8 +222,18 @@ def create_table_country() -> None:
     all_columns: dict[str, set[tuple[str, str, str]]] = get_main_columns(
         sql_engine, CFG.sql.snippets_dir / 'countries_name', all_in_tables)
     all_columns = sanity_check_names(all_columns)
-    table_names: set[str] = mk_tables_name(all_columns)
+    tables_name: set[str] = mk_tables_name(all_columns)
+    countries_indicators: dict[str, set[str]] = get_country_set(all_columns)
+
+    country_tables = CreateCountryWideTables(
+        engine=sql_engine,
+        tables_name=tables_name,
+        countries_indicators=countries_indicators,
+        const_str=CFG.validd
+        )
+    country_tables.create(CFG.sql.snippets_dir / "per_country_wide",
+                          CFG.sql.year_range)
 
 
 if __name__ == '__main__':
-    create_table_country()
+    create_tables()

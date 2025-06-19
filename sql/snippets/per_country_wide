@@ -1,0 +1,9 @@
+/*
+to create tables for each country from all the tables
+*/
+
+SELECT
+    '{indicator}'   AS indicator
+    {year_columns}
+FROM {wide_table}
+WHERE country_code = '{country_code}'
