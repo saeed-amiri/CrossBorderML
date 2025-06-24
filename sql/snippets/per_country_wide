@@ -1,5 +1,5 @@
 SELECT
-    '{indicator}'   AS indicator
+    '{indicator}'   AS indicator,
     {year_columns}
 FROM {wide_table}
-WHERE country_code = '{country_code}'
+WHERE "Country Code" = '{country_code}'
