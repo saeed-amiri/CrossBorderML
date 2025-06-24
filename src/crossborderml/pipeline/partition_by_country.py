@@ -173,12 +173,22 @@ class CreateCountryWideTables:
             next(iter(countries_indicators.values()))
 
     def create(self, snippet_path: Path, year_range: tuple[int, int]) -> None:
-        """self explanytory"""
+        """self explanatory"""
         sql_temp: str = get_snippet(snippet_path)
         year_cols: str = self.get_years(year_range)
-        for country_code in self.countries_code:
+        for country_code, table_name in zip(self.countries_code,
+                                            self.tables_name):
             selects = self.mk_country(country_code, year_cols, sql_temp)
             union_block = "\nUNION ALL\n".join(selects)
+            drop_table: str = f"DROP TABLE IF EXISTS {table_name};\n"
+            sql_txt: str = (
+                f"CREATE TABLE {table_name} AS \n"
+                f"{union_block}\n"
+                ";"
+            )
+            with self.engine.begin() as conn:
+                conn.execute(text(drop_table))
+                conn.execute(text(sql_txt))
 
     def mk_country(
             self,
